@@ -20,10 +20,14 @@ function dealWithFolders(folders, filesPath, recFilesPath, callback) {
         fs.readdir(folder, (err, data) => {
             if (err) return err;
 
-            data.forEach(item => {
+            data.forEach((item, index) => {
                 if (extnameReg.test(pathModule.extname(item))) {
                     filesPath.push(folder + '/' + item);
                     recFilesPath.push(receiverPath + '/' + item);
+                }
+
+                if (index === data.length - 1) {
+                    callback(filesPath, recFilesPath);
                 }
             });
 
@@ -34,8 +38,6 @@ function dealWithFolders(folders, filesPath, recFilesPath, callback) {
             console.log(recFilesPath);
         })
     });
-
-    callback(filesPath, recFilesPath);
 }
 
 function moveFiles(from, to) {
