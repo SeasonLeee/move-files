@@ -1,7 +1,7 @@
 const fs = require('fs');
 const pathModule = require('path');
 const path = '/Users/benjamin/Books/ForMoveTest';
-const receiverPath = '/Users/benjamin/Books/receiver';
+const receiverPath = '/Users/benjamin/Books/newReceiver';
 
 let bookFolders;
 let bookPaths = [];
@@ -16,18 +16,14 @@ function getFullFolderName(folder) {
 const extnameReg = /.pdf|.epub|.azw3/i;
 
 function dealWithFolders(folders, filesPath, recFilesPath, callback) {
-    folders.forEach(folder => {
+    folders.forEach((folder, index) => {
         fs.readdir(folder, (err, data) => {
             if (err) return err;
 
-            data.forEach((item, index) => {
+            data.forEach(item => {
                 if (extnameReg.test(pathModule.extname(item))) {
                     filesPath.push(folder + '/' + item);
                     recFilesPath.push(receiverPath + '/' + item);
-                }
-
-                if (index === data.length - 1) {
-                    callback(filesPath, recFilesPath);
                 }
             });
 
@@ -36,7 +32,11 @@ function dealWithFolders(folders, filesPath, recFilesPath, callback) {
 
             console.log('recFilesPath.length === ', filesPath.length);
             console.log(recFilesPath);
-        })
+
+            if (index === folders.length - 1) {
+                callback(filesPath, recFilesPath);
+            }
+        });        
     });
 }
 
